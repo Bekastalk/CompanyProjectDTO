@@ -12,4 +12,11 @@ public class TaskResponse {
     private String taskName;
     private String taskText;
     private LocalDate deadLine;
+
+    public TaskResponse(Long id, String taskName, String taskText, LocalDate deadLine) {
+        this.id = id;
+        this.taskName = taskName;
+        this.taskText = taskText;
+        this.deadLine = deadLine;
+    }
 }

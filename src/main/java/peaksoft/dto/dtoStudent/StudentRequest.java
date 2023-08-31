@@ -1,7 +1,5 @@
 package peaksoft.dto.dtoStudent;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 import peaksoft.enums.StudyFormat;

@@ -16,7 +16,7 @@ public class LessonApi {
     private final LessonService lessonService;
 
     @PostMapping("/{courseId}")
-    SimpleResponse save(@PathVariable Long courseId,
+    SimpleResponse saveLesson(@PathVariable Long courseId,
                         @RequestBody LessonRequest lessonRequest){
         return lessonService.saveLesson(courseId, lessonRequest);
     }
@@ -42,9 +42,9 @@ public class LessonApi {
         return lessonService.deleteLesson(lessonId);
     }
 
-    @GetMapping("/{groupId}")
-    List<LessonResponse> findAllByCourseId(@PathVariable Long groupId){
-        return lessonService.findAll(groupId);
+    @GetMapping("/{courseId}")
+    List<LessonResponse> findAllByCourseId(@PathVariable Long courseId){
+        return lessonService.findAll(courseId);
     }
 
 }

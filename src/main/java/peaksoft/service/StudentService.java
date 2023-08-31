@@ -16,4 +16,6 @@ public interface StudentService {
     SimpleResponse deleteStudent(Long id);
 
     List<StudentResponse> findAll(Long groupId);
+
+    SimpleResponse assign(Long studentId, Long groupId);
 }

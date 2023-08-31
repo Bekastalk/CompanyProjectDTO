@@ -23,18 +23,13 @@ public class Lesson {
     private Long id;
     @Column(name = "lesson_name")
     private String lessonName;
-    @OneToMany(mappedBy = "lesson")
-    private List<Course> courses;
-    @OneToMany(mappedBy = "lesson")
+    @ManyToOne(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    private Course courses;
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<Task> tasks;
-
-    public void addCourse(Course course) {
-        if (courses == null) {
-            courses = new ArrayList<>();
-        } else {
-            courses.add(course);
-        }
-    }
 
     public void addTask(Task task) {
         if (tasks == null) {

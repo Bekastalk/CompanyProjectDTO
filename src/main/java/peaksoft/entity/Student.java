@@ -16,7 +16,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_gen")
     @SequenceGenerator(name = "student_gen",
-            sequenceName = "lesson_seq",
+            sequenceName = "student_seq",
             allocationSize = 1)
     private Long id;
     @Column(name = "first_name")
@@ -29,6 +29,9 @@ public class Student {
     private String email;
     @Enumerated(EnumType.STRING)
     private StudyFormat studyFormat;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     private Group group;
 }

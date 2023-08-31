@@ -8,8 +8,11 @@ import peaksoft.dto.CompanyRequest;
 import peaksoft.dto.CompanyRespoce;
 import peaksoft.dto.SimpleResponse;
 import peaksoft.entity.Company;
+import peaksoft.entity.Instructor;
+import peaksoft.exeptions.InvalidEmailException;
 import peaksoft.exeptions.NotFoundException;
 import peaksoft.repasitory.CompanyRepository;
+import peaksoft.repasitory.InstructorRepository;
 import peaksoft.service.CompanyService;
 
 import java.time.LocalDate;
@@ -22,20 +25,24 @@ import java.util.NoSuchElementException;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final InstructorRepository instructorRepository;
     @Override
     public SimpleResponse saveCompany(CompanyRequest companyRequest) {
-        Company company=new Company();
-        company.setName(companyRequest.getName());
-        company.setCountry(companyRequest.getCountry());
-        company.setAddress(companyRequest.getAddress());
-        company.setPhoneNumber(companyRequest.getPhoneNumber());
-        company.setCreatedDate(LocalDate.now());
-        company.setGraduationDate(companyRequest.getGraduationDate());
-        companyRepository.save(company);
-        return new SimpleResponse(
-                HttpStatus.OK,
-                String.format("Company with id: %s successfully saved", company.getId())
-        );
+        Company byName = companyRepository.findByName(companyRequest.getName());
+        if(byName==null) {
+            Company company = new Company();
+            company.setName(companyRequest.getName());
+            company.setCountry(companyRequest.getCountry());
+            company.setAddress(companyRequest.getAddress());
+            company.setPhoneNumber(companyRequest.getPhoneNumber());
+            company.setCreatedDate(LocalDate.now());
+            company.setGraduationDate(companyRequest.getGraduationDate());
+            companyRepository.save(company);
+            return new SimpleResponse(
+                    HttpStatus.OK,
+                    String.format("Company with id: %s successfully saved", company.getId())
+            );
+        }else throw new InvalidEmailException(String.format("такое название : %s уже существует", companyRequest.getName()));
     }
 
     @Override
@@ -63,7 +70,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.save(company);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message(String.format("Company with id: %s successfully saved", company.getId()))
+                .message(String.format("Company with id: %s successfully updated", company.getId()))
                         .build();
     }
 
@@ -72,8 +79,11 @@ public class CompanyServiceImpl implements CompanyService {
         if(!companyRepository.existsById(id)){
             throw new NotFoundException("Company with id: "+id+" not found");
         }
-        companyRepository.deleteById(id);
-
+        else {
+            List<Instructor> instructors = instructorRepository.findAll();
+            instructors.forEach(instructor -> instructor.getCompanies().removeIf(in->in.getId().equals(id)));
+            companyRepository.deleteById(id);
+        }
         return new SimpleResponse(
                 HttpStatus.OK,
                 "Company with id: "+id+" is deleted"

@@ -9,9 +9,11 @@ import peaksoft.dto.dtoCourse.CourseRequest;
 import peaksoft.dto.dtoCourse.CourseResponse;
 import peaksoft.entity.Company;
 import peaksoft.entity.Course;
+import peaksoft.entity.Instructor;
 import peaksoft.exeptions.NotFoundException;
 import peaksoft.repasitory.CompanyRepository;
 import peaksoft.repasitory.CourseRepository;
+import peaksoft.repasitory.InstructorRepository;
 import peaksoft.service.CourseService;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final CompanyRepository companyRepository;
+    private final InstructorRepository instructorRepository;
     @Override
     public SimpleResponse saveCourse(Long companyId, CourseRequest courseRequest) {
         Company company = companyRepository.findById(companyId).orElseThrow(
@@ -69,10 +72,15 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public SimpleResponse deleteCourse(Long id) {
         if(!courseRepository.existsById(id)){
-            throw new NotFoundException("Company with id: "+id+" not found");
-        }
-        courseRepository.deleteById(id);
+            throw new NotFoundException("Course with id: "+id+" not found");
+        } else {
+            List<Instructor> instructors = instructorRepository.findAll();
+            List<Company> companies = companyRepository.findAll();
 
+            instructors.forEach(instructor -> instructor.getCourses().removeIf(in -> in.getId().equals(id)));
+            companies.forEach(company -> company.getCourses().removeIf(com -> com.getId().equals(id)));
+            courseRepository.deleteById(id);
+        }
         return new SimpleResponse(
                 HttpStatus.OK,
                 "Course with id: "+id+" is deleted"

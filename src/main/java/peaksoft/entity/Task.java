@@ -25,7 +25,10 @@ public class Task {
     private String taskText;
     @Column(name = "dead_line")
     private LocalDate deadLine;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     private Lesson lesson;
 
 }

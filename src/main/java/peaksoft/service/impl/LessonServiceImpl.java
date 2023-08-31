@@ -22,17 +22,19 @@ import java.util.List;
 public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
+
     @Override
-    public SimpleResponse saveLesson(Long courseId,LessonRequest lessonRequest) {
+    public SimpleResponse saveLesson(Long courseId, LessonRequest lessonRequest) {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException
                 ("Course with id: " + courseId + " not found"));
-        Lesson lesson=new Lesson();
+        Lesson lesson = new Lesson();
         lesson.setLessonName(lessonRequest.getLessonName());
-        lesson.addCourse(course);
+        course.addLesson(lesson);
+        lesson.setCourses(course);
         lessonRepository.save(lesson);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message(String.format("Lesson with id: %s successfully saved",lesson.getId()))
+                .message(String.format("Lesson with id: %s successfully saved", lesson.getId()))
                 .build();
     }
 
@@ -57,7 +59,7 @@ public class LessonServiceImpl implements LessonService {
         lessonRepository.save(lesson);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message(String.format("Lesson with id: %s successfully saved",lesson.getId()))
+                .message(String.format("Lesson with id: %s successfully saved", lesson.getId()))
                 .build();
     }
 
@@ -65,12 +67,14 @@ public class LessonServiceImpl implements LessonService {
     public SimpleResponse deleteLesson(Long id) {
         if(!lessonRepository.existsById(id)){
             throw new NotFoundException("Lesson with id: "+id+" not found");
+        }else {
+            List<Course> courses = courseRepository.findAll();
+            courses.forEach(course -> course.getLessons().removeIf(cor -> cor.getId().equals(id)));
+            lessonRepository.deleteById(id);
         }
-        lessonRepository.deleteById(id);
-
         return new SimpleResponse(
                 HttpStatus.OK,
-                "Lesson with id: "+id+" is deleted"
+                "Lesson with id: " + id + " is deleted"
         );
     }
 

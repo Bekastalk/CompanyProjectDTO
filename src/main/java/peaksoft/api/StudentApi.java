@@ -47,4 +47,10 @@ public class StudentApi {
         return studentService.findAll(groupId);
     }
 
+    @PostMapping("/assign")
+    public SimpleResponse assignInstructorToCompany(
+            @RequestParam Long studentId,
+            @RequestParam Long groupId){
+        return studentService.assign(studentId,groupId);
+    }
 }

@@ -27,16 +27,17 @@ public class TaskServiceImpl implements TaskService {
     public SimpleResponse saveTask(Long lessonId,TaskRequest taskRequest) {
         Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(
                 () -> new NotFoundException
-                        ("Instructor with id: " + lessonId + " not found"));
+                        ("Lesson with id: " + lessonId + " not found"));
         Task task=new Task();
         task.setTaskName(taskRequest.getTaskName());
         task.setTaskText(taskRequest.getTaskText());
         task.setDeadLine(taskRequest.getDeadLine());
         lesson.addTask(task);
+        task.setLesson(lesson);
         taskRepository.save(task);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message(String.format("Student with id: %s successfully saved",task.getId()))
+                .message(String.format("Task with id: %s successfully saved",task.getId()))
                 .build();
     }
 
@@ -49,21 +50,21 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse getTaskById(Long id) {
         return taskRepository.getTaskById(id).orElseThrow(
                 () -> new NotFoundException
-                        ("Instructor with id: " + id + " not found"));
+                        ("Task with id: " + id + " not found"));
     }
 
     @Override
     public SimpleResponse updateTask(Long id, TaskRequest taskRequest) {
         Task task = taskRepository.findById(id).orElseThrow(
                 () -> new NotFoundException
-                        ("Instructor with id: " + id + " not found"));
+                        ("Task with id: " + id + " not found"));
         task.setTaskName(taskRequest.getTaskName());
         task.setTaskText(taskRequest.getTaskText());
         task.setDeadLine(taskRequest.getDeadLine());
         taskRepository.save(task);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message(String.format("Student with id: %s successfully saved",task.getId()))
+                .message(String.format("Task with id: %s successfully updated",task.getId()))
                 .build();
     }
 
@@ -71,9 +72,11 @@ public class TaskServiceImpl implements TaskService {
     public SimpleResponse deleteTask(Long id) {
         if(!taskRepository.existsById(id)){
             throw new NotFoundException("Task with id: "+id+" not found");
+        }else {
+            List<Lesson> lessons = lessonRepository.findAll();
+            lessons.forEach(lesson -> lesson.getTasks().removeIf(les -> les.getId().equals(id)));
+            taskRepository.deleteById(id);
         }
-        taskRepository.deleteById(id);
-
         return new SimpleResponse(
                 HttpStatus.OK,
                 "Task with id: "+id+" is deleted"

@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 import peaksoft.dto.SimpleResponse;
 import peaksoft.dto.dtoStudent.StudentRequest;
 import peaksoft.dto.dtoStudent.StudentResponse;
+import peaksoft.entity.Group;
 import peaksoft.entity.Student;
 import peaksoft.exeptions.InvalidEmailException;
 import peaksoft.exeptions.NotFoundException;
-import peaksoft.repasitory.CompanyRepository;
+import peaksoft.repasitory.GroupRepository;
 import peaksoft.repasitory.StudentRepository;
 import peaksoft.service.StudentService;
 
@@ -20,9 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class StudentServiceImpl implements StudentService {
-
-    private final CompanyRepository companyRepository;
     private final StudentRepository studentRepository;
+    private final GroupRepository groupRepository;
 
     @Override
     public SimpleResponse saveStudent(StudentRequest studentRequest) {
@@ -77,9 +77,11 @@ public class StudentServiceImpl implements StudentService {
     public SimpleResponse deleteStudent(Long id) {
         if(!studentRepository.existsById(id)){
             throw new NotFoundException("Student with id: "+id+" not found");
+        }else {
+            List<Group> groups = groupRepository.findAll();
+            groups.forEach(group -> group.getStudents().removeIf(gr -> gr.getId().equals(id)));
+            studentRepository.deleteById(id);
         }
-        studentRepository.deleteById(id);
-
         return new SimpleResponse(
                 HttpStatus.OK,
                 "Student with id: "+id+" is deleted"
@@ -89,5 +91,23 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentResponse> findAll(Long groupId) {
         return studentRepository.findAllStudentsByGroupId(groupId);
+    }
+
+    @Override
+    public SimpleResponse assign(Long studentId, Long groupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(
+                () -> new NotFoundException
+                        ("Group with id: " + groupId + " not found"));
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                () -> new NotFoundException
+                        ("Student with id: " + studentId + " not found"));
+        group.getStudents().add(student);
+        student.setGroup(group);
+        studentRepository.save(student);
+        groupRepository.save(group);
+        return SimpleResponse.builder()
+                .httpStatus(HttpStatus.OK)
+                .message(String.format("Student with id: %s successfully assigned",student.getId()))
+                .build();
     }
 }

@@ -25,7 +25,10 @@ public class Group {
     @Column(name = "image_link")
     private String imageLink;
     private String description;
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany(mappedBy = "groups",cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     private List<Course> courses;
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Student> students;

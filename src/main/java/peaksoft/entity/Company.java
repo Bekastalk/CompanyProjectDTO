@@ -32,7 +32,10 @@ public class Company {
     private String phoneNumber;
     private LocalDate createdDate;
     private LocalDate graduationDate;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     private List<Instructor> instructors;
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Course> courses;

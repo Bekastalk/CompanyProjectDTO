@@ -72,10 +72,12 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public SimpleResponse deleteGroup(Long id) {
         if(!groupRepository.existsById(id)){
-            throw new NotFoundException("Company with id: "+id+" not found");
+            throw new NotFoundException("Group with id: "+id+" not found");
+        }else {
+            List<Course> courses = courseRepository.findAll();
+            courses.forEach(course -> course.getGroups().removeIf(cor -> cor.getId().equals(id)));
+            groupRepository.deleteById(id);
         }
-        groupRepository.deleteById(id);
-
         return new SimpleResponse(
                 HttpStatus.OK,
                 "Group with id: "+id+" is deleted"

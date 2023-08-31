@@ -26,8 +26,14 @@ public class Instructor {
     @Column(name = "phone_number")
     private String phoneNumber;
     private String specialization;
-    @ManyToMany(mappedBy = "instructors")
+    @ManyToMany(mappedBy = "instructors",cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     private List<Company> companies;
-    @OneToMany(mappedBy = "instructor")
+    @OneToMany(mappedBy = "instructor",cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     private List<Course> courses;
 }

@@ -15,34 +15,34 @@ import java.util.List;
 public class TaskApi {
     private final TaskService taskService;
 
-    @PostMapping("/{lessonId}")
+    @PostMapping("/{lessonId}/save")
     SimpleResponse save(@PathVariable Long lessonId,
                         @RequestBody TaskRequest taskRequest){
         return taskService.saveTask(lessonId, taskRequest);
     }
 
-    @GetMapping
+    @GetMapping("/task")
     List<TaskResponse> getAll(){
         return taskService.getAllTask();
     }
 
-    @GetMapping("/{taskId}/get")
+    @GetMapping("/{taskId}/taskById")
     TaskResponse getById(@PathVariable Long taskId){
         return taskService.getTaskById(taskId);
     }
 
-    @PutMapping("/{taskId}")
+    @PutMapping("/{taskId}/task")
     SimpleResponse update(@PathVariable Long taskId,
                           @RequestBody TaskRequest taskRequest){
         return taskService.updateTask(taskId, taskRequest);
     }
 
-    @DeleteMapping("/{taskId}")
+    @DeleteMapping("/{taskId}/task")
     SimpleResponse delete(@PathVariable Long taskId){
         return taskService.deleteTask(taskId);
     }
 
-    @GetMapping("/{lessonId}")
+    @GetMapping("/{lessonId}/task")
     List<TaskResponse> findAll(@PathVariable Long lessonId){
         return taskService.findAll(lessonId);
     }

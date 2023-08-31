@@ -26,12 +26,18 @@ public class Course {
     @Column(name = "date_of_start")
     private LocalDate dateOfStart;
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     private Company company;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH,
+    CascadeType.MERGE,
+    CascadeType.PERSIST,
+    CascadeType.REFRESH})
     private Instructor instructor;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Lesson lesson;
+    @OneToMany(mappedBy = "courses",cascade = CascadeType.ALL)
+    private List<Lesson> lessons;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Group> groups;
 
@@ -43,4 +49,11 @@ public class Course {
         }
     }
 
+    public void addLesson(Lesson lesson) {
+        if (lessons == null) {
+            lessons = new ArrayList<>();
+        } else {
+            lessons.add(lesson);
+        }
+    }
 }

@@ -3,6 +3,7 @@ package peaksoft.service;
 import peaksoft.dto.CompanyRequest;
 import peaksoft.dto.CompanyRespoce;
 import peaksoft.dto.SimpleResponse;
+import peaksoft.dto.dtoInstructor.InstructorCountStudent;
 import peaksoft.dto.dtoInstructor.InstructorRequest;
 import peaksoft.dto.dtoInstructor.InstructorResponse;
 
@@ -16,4 +17,10 @@ public interface InstructorService {
     SimpleResponse deleteInstructor(Long id);
 
     List<InstructorResponse> findAll(Long companyId);
+
+    SimpleResponse assign(Long instructorId, Long companyId);
+
+    SimpleResponse assignToCourse(Long instructorId, Long courseId);
+
+    InstructorCountStudent countStudent(Long id);
 }

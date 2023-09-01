@@ -22,5 +22,5 @@ public interface InstructorService {
 
     SimpleResponse assignToCourse(Long instructorId, Long courseId);
 
-    InstructorCountStudent countStudent(Long id);
+    List<InstructorCountStudent> countStudent(Long id);
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import peaksoft.dto.CompanyRequest;
 import peaksoft.dto.CompanyRespoce;
+import peaksoft.dto.GetCompanyInformation;
 import peaksoft.dto.SimpleResponse;
 import peaksoft.entity.Company;
 import peaksoft.entity.Instructor;
@@ -88,6 +89,11 @@ public class CompanyServiceImpl implements CompanyService {
                 HttpStatus.OK,
                 "Company with id: "+id+" is deleted"
         );
+    }
+
+    @Override
+    public List<GetCompanyInformation> getCompanyInformation(Long id) {
+        return companyRepository.getCompanyInformation(id);
     }
 
 }

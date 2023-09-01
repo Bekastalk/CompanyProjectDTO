@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import peaksoft.dto.SimpleResponse;
 import peaksoft.dto.dtoStudent.StudentRequest;
 import peaksoft.dto.dtoStudent.StudentResponse;
+import peaksoft.enums.StudyFormat;
 import peaksoft.service.StudentService;
 
 import java.util.List;
@@ -52,5 +53,10 @@ public class StudentApi {
             @RequestParam Long studentId,
             @RequestParam Long groupId){
         return studentService.assign(studentId,groupId);
+    }
+
+    @GetMapping("/studyFormat")
+    public List<StudentResponse> sortStudyFormat(@RequestParam StudyFormat studyFormat){
+        return studentService.filterStudyFormat(studyFormat);
     }
 }

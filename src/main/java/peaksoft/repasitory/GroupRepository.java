@@ -3,6 +3,7 @@ package peaksoft.repasitory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import peaksoft.dto.dtoGroup.CountStud;
 import peaksoft.dto.dtoGroup.GroupResponse;
 import peaksoft.entity.Group;
 
@@ -30,4 +31,9 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             "join g.courses c " +
             "where c.id = :courseId ")
     List<GroupResponse> findGroupByCourseId(Long courseId);
+
+    @Query("select new peaksoft.dto.dtoGroup.CountStud(cast(COUNT(s.id) as int ) ) from Group g " +
+            "join g.students s " +
+            "where g.id=:id")
+    CountStud countStud(Long id);
 }

@@ -1,6 +1,7 @@
 package peaksoft.service;
 
 import peaksoft.dto.SimpleResponse;
+import peaksoft.dto.dtoGroup.CountStud;
 import peaksoft.dto.dtoGroup.GroupRequest;
 import peaksoft.dto.dtoGroup.GroupResponse;
 
@@ -14,5 +15,7 @@ public interface GroupService {
     SimpleResponse deleteGroup(Long id);
 
     List<GroupResponse> findAllCourseId(Long courseId);
+
+    CountStud countStud(Long id);
 
 }

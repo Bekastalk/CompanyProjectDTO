@@ -1,7 +1,11 @@
 package peaksoft.dto.dtoInstructor;
 
-public class InstructorCountStudent {
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
+public class InstructorCountStudent {
     private Long id;
     private String lastName;
     private String phoneNumber;

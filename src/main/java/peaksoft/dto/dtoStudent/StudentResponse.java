@@ -1,7 +1,5 @@
 package peaksoft.dto.dtoStudent;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 import peaksoft.enums.StudyFormat;
@@ -15,13 +13,15 @@ public class StudentResponse {
     private String phoneNumber;
     private String email;
     private StudyFormat studyFormat;
+    private Boolean block;
 
-    public StudentResponse(Long id, String firstName, String lastName, String phoneNumber, String email, StudyFormat studyFormat) {
+    public StudentResponse(Long id, String firstName, String lastName, String phoneNumber, String email, StudyFormat studyFormat, Boolean block) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.studyFormat = studyFormat;
+        this.block=block;
     }
 }

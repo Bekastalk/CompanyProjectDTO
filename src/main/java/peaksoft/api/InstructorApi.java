@@ -64,7 +64,7 @@ public class InstructorApi {
     }
 
     @GetMapping("/{inId}/count")
-    InstructorCountStudent count(@PathVariable Long inId){
+    List<InstructorCountStudent> count(@PathVariable Long inId){
         return instructorService.countStudent(inId);
     }
 }

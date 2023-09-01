@@ -14,7 +14,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("select new peaksoft.dto.dtoCourse.CourseResponse(c.id," +
             "c.courseName," +
             " c.dateOfStart," +
-            " c.description) from Course c")
+            " c.description) from Course c order by c.dateOfStart")
     List<CourseResponse> getAllCourses();
 
     Optional<CourseResponse> getCourseById(Long id);

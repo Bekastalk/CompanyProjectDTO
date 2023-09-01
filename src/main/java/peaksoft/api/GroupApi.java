@@ -3,6 +3,7 @@ package peaksoft.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.dto.SimpleResponse;
+import peaksoft.dto.dtoGroup.CountStud;
 import peaksoft.dto.dtoGroup.GroupRequest;
 import peaksoft.dto.dtoGroup.GroupResponse;
 import peaksoft.repasitory.GroupRepository;
@@ -48,4 +49,8 @@ public class GroupApi {
         return groupService.findAllCourseId(courseId);
     }
 
+    @GetMapping("/{id}/count")
+    CountStud countStud(@PathVariable Long id){
+        return groupService.countStud(id);
+    }
 }

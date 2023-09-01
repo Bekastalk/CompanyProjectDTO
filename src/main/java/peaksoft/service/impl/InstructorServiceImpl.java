@@ -135,7 +135,7 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public InstructorCountStudent countStudent(Long id) {
+    public List<InstructorCountStudent> countStudent(Long id) {
         return instructorRepository.getInstructorCountStudents(id);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.dto.CompanyRequest;
 import peaksoft.dto.CompanyRespoce;
+import peaksoft.dto.GetCompanyInformation;
 import peaksoft.dto.SimpleResponse;
 import peaksoft.service.CompanyService;
 
@@ -39,6 +40,11 @@ public class CompanyApi {
     @DeleteMapping("/{companyId}")
     SimpleResponse deleteCompany(@PathVariable Long companyId){
         return companyService.deleteCompany(companyId);
+    }
+
+    @GetMapping("/{companyId}/info")
+    List<GetCompanyInformation> getCompanyInformation(@PathVariable Long companyId){
+        return companyService.getCompanyInformation(companyId);
     }
 
 }

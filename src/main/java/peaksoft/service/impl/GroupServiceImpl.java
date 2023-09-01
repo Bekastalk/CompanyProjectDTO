@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import peaksoft.dto.SimpleResponse;
+import peaksoft.dto.dtoGroup.CountStud;
 import peaksoft.dto.dtoGroup.GroupRequest;
 import peaksoft.dto.dtoGroup.GroupResponse;
 import peaksoft.entity.Course;
@@ -87,5 +88,10 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<GroupResponse> findAllCourseId(Long courseId) {
         return groupRepository.findGroupByCourseId(courseId);
+    }
+
+    @Override
+    public CountStud countStud(Long id) {
+        return groupRepository.countStud(id);
     }
 }

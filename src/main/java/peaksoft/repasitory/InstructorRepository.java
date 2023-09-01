@@ -37,12 +37,12 @@ public interface InstructorRepository extends JpaRepository<Instructor, Long> {
             "i.firstName," +
             "i.lastName, " +
             "i.phoneNumber, " +
-            "i.specialization , g.groupName, cast(COUNT(s.id) as int ) ) " +
+            "i.specialization , g.groupName , cast(COUNT(s.id) as int ) ) " +
             "FROM Instructor i " +
             "JOIN i.courses c " +
             "JOIN c.groups g " +
             "JOIN g.students s " +
             "where i.id=:id " +
-            "group by i.id, i.firstName, i.lastName, i.phoneNumber, i.specialization, g.groupName")
-    InstructorCountStudent getInstructorCountStudents(@Param("id") Long id);
+            "group by i.id, i.firstName, i.lastName, i.phoneNumber, i.specialization,g.groupName")
+    List<InstructorCountStudent> getInstructorCountStudents(@Param("id") Long id);
 }

@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import peaksoft.dto.SimpleResponse;
+import peaksoft.dto.dtoGroup.CountStud;
 import peaksoft.dto.dtoStudent.StudentRequest;
 import peaksoft.dto.dtoStudent.StudentResponse;
 import peaksoft.entity.Group;
 import peaksoft.entity.Student;
+import peaksoft.enums.StudyFormat;
 import peaksoft.exeptions.InvalidEmailException;
 import peaksoft.exeptions.NotFoundException;
 import peaksoft.repasitory.GroupRepository;
@@ -110,4 +112,10 @@ public class StudentServiceImpl implements StudentService {
                 .message(String.format("Student with id: %s successfully assigned",student.getId()))
                 .build();
     }
+
+    @Override
+    public List<StudentResponse> filterStudyFormat(StudyFormat studyFormat) {
+        return studentRepository.filterStudyFormat(studyFormat);
+    }
+
 }

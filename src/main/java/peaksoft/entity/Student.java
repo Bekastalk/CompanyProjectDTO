@@ -29,6 +29,7 @@ public class Student {
     private String email;
     @Enumerated(EnumType.STRING)
     private StudyFormat studyFormat;
+    private Boolean block;
     @ManyToOne(cascade = {CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST,
